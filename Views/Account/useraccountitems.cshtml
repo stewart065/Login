@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inventory List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <style>
+        @@media print {
+            .no-print, .print-hide {
+                display: none;
+            }
+        }
+
+        .custom-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #fff;
+            background-color: #17a2b8;
+            border: none;
+            border-radius: 0.3rem;
+            text-decoration: none;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .custom-btn:hover {
+            background-color: #138496;
+            transform: scale(1.05);
+        }
+
+        .custom-btn:active {
+            transform: scale(0.98);
+        }
+
+        .custom-btn i {
+            margin-right: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .table-header {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="table-header">
+            <a class="custom-btn no-print" asp-action="DisplayPendingAndApprovedUsers">
+                Dashboard
+            </a>
+            <button id="printBtn" class="btn btn-primary no-print">
+                <i class="fas fa-print"></i>  Print Selected
+            </button>
+        </div>
+        <h2>Inventory List</h2>
+        <table id="dataints" class="display" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Medicine Name</th>
+                    <th>Medis</th>
+                    <th>Price</th>
+                    <th>Medicine Type</th>
+                    <th>Stock</th>
+                    <th>Status</th>
+                    <th>User Name</th>
+                    <th class="print-hide">User ID</th>
+                    @* <th class="print-hide">Actions</th> *@
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var table = $('#dataints').DataTable({
+                responsive: true,
+                ajax: {
+                    url: "../api/newapi/getInvt",
+                    dataSrc: '',
+                    error: function (xhr, error, thrown) {
+                        console.error('Error fetching data:', thrown);
+                    },
+                    complete: function (xhr, status) {
+                        console.log('Response data:', xhr.responseJSON);
+                    }
+                },
+                columns: [
+                    { data: 'typemed', title: 'Type' },
+                    { data: 'mendname', title: 'Medicine Name' },
+                    { data: 'medis', title: 'Medis' },
+                    { data: 'price', title: 'Price' },
+                    { data: 'medicinetyp', title: 'Medicine Type' },
+                    { data: 'stck', title: 'Stock' },
+                    { data: 'statusmed', title: 'Status' },
+                    { data: 'userName', title: 'User Name' },
+                    { data: 'userid', title: 'User ID' },
+                    
+                ]
+            });
+
+            $('#printBtn').click(function() {
+                var selectedUserid = prompt("Enter UserID to print items with this UserID:");
+
+                if (selectedUserid) {
+                    var filteredData = table.rows().nodes().to$().filter(function() {
+                        var rowUserid = $(this).find('td').eq(8).text().trim();
+                        return rowUserid === selectedUserid;
+                    });
+
+                    if (filteredData.length === 0) {
+                        alert('No records found with the specified UserID.');
+                        return;
+                    }
+
+                    var printContent = '<html><head><title>Print</title></head><body>';
+                    printContent += '<h2>Items with UserID: ' + selectedUserid + '</h2>';
+                    printContent += '<table border="1" style="width:100%; border-collapse: collapse;">';
+                    printContent += '<tr><th>Type</th><th>Medicine Name</th><th>Medis</th><th>Price</th><th>Medicine Type</th><th>Stock</th><th>Status</th><th>User Name</th></tr>';
+                    
+                    filteredData.each(function() {
+                        var row = $(this).find('td');
+                        printContent += '<tr>';
+                        row.each(function(index) {
+                            if (index !== 8 && index !== 9) {
+                                printContent += '<td>' + $(this).text() + '</td>';
+                            }
+                        });
+                        printContent += '</tr>';
+                    });
+
+                    printContent += '</table>';
+                    printContent += '</body></html>';
+
+                    var printWindow = window.open('', '', 'height=600,width=800');
+                    printWindow.document.write(printContent);
+                    printWindow.document.close();
+                    printWindow.focus();
+                    printWindow.print();
+                }
+            });
+        });
+
+        function updateRecord(userid) {
+            console.log('Update button clicked for UserID:', userid);
+            // Implement further logic for updating the record here
+        }
+    </script>
+</body>
+</html>

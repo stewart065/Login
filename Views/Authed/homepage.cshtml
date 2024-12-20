@@ -1,0 +1,653 @@
+@model IEnumerable<login.Models.Invt>
+@Html.Partial("Partial/create")
+@Html.Partial("Partial/update")
+@Html.Partial("Partial/Delete")
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<head>
+  <!-- ... -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<input type="checkbox" id="checkbox">
+<label for="checkbox" id="navbtn">
+  <i class="fas fa-bars"></i>
+</label>
+
+<div class="body">
+  <div class="side-bar">
+    <div class="user-p">
+      <img
+        src="https://scontent.fceb7-1.fna.fbcdn.net/v/t1.15752-9/368075470_2315398591993761_8374933678661800853_n.png?_nc_cat=107&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeFmir4yccobZNT5I94TE3FZzebmncEa6CLN5uadwRroItmkabzunSsyqMrZHI-6NVmH39FAmTFHEgf9VsufNjqD&_nc_ohc=-R2oeSNh8CYAX9G1rTf&_nc_ht=scontent.fceb7-1.fna&oh=03_AdRnfqIpl4iqW4ZBEVpcaXz_LmwHMSmMCskhumd4IWqoSQ&oe=65DABB00"
+        alt="">
+      <h4>ASKMED</h4>
+    </div>
+    <ul>
+      <li><a style="color: white;" data-bs-toggle="modal" data-bs-target="#exampleModal"><i
+            class="fas fa-plus"></i><span> ADD MED</span></a></li>
+      <li><a asp-action="Index" asp-controller="Crud"><i class="fa-solid fa-plus"></i> <span>Add GenericName</span></a>
+
+      <li><a asp-action="profile"><i class="fas fa-user"></i> <span> Profile</span></a></li>
+      </li>
+      <li><a asp-action="Logout" asp-controller="Account"><i class="fas fa-sign-out-alt"></i> <span> Logout</span></a>
+      </li>
+    </ul>
+  </div>
+
+  <section class="section-1">
+    <div class="col">
+      <div class="e-tabs mb-3 px-3">
+        <ul class="nav nav-tabs">
+          <h1 id="meddew">ASKMED</h1>
+        </ul>
+      </div>
+      <button id="printBtn" class="btn btn-primary">Print</button>
+
+      <div class="row flex-lg-nowrap">
+        <div class="col mb-3">
+          <div class="e-panel card">
+            <div class="card-body">
+              <div class="card-title">
+                <h6 class="px-1" id="textmed">List of Medicines</small></h6>
+              </div>
+              <div class="e-table">
+                <div class="table-responsive table-lg mt-3">
+                  <table id="dataints" class="table table-bordered" width="100%">
+                    <thead>
+                      <tr>
+                        @* <th>Id</th> *@
+                        <th class="max-width">Generic Name</th>
+                        <th class="sortable">BrandName</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th>Type</th>
+                        <th>Stock</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                  </table>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+  </section>
+</div>
+
+
+
+<style>
+  @**{padding:0;margin:0;box-sizing:border-box;font-family:arial,sans-serif;}*@.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background: #23242b;
+    color: #fff;
+  }
+
+  @@media print {
+
+    .side-bar,
+    #printBtn {
+      display: none;
+    }
+
+    .section-1 {
+      width: 100%;
+    }
+  }
+
+  .u-name {
+    font-size: 20px;
+    padding-left: 17px;
+  }
+
+  .u-name b {
+    color: #127b8e;
+  }
+
+  .header i {
+    font-size: 30px;
+    cursor: pointer;
+    color: #fff;
+  }
+
+  .header i:hover {
+    color: #127b8e;
+  }
+
+  .user-p {
+  @*text-align:center;*@padding-left: 40px;
+    padding-top: 25px;
+  }
+
+  .user-p img {
+    width: 100px;
+    border-radius: 50%;
+  }
+
+  .user-p h4 {
+    color: #ccc;
+    padding: 5px 0;
+
+  }
+
+  .side-bar {
+    width: 230px;
+    background: #262931;
+    min-height: 100vh;
+    transition: 500ms width;
+  }
+
+  .body {
+    display: flex;
+  }
+
+  .section-1 {
+    width: 100%;
+    background: url("../img/bg.jpg");
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .section-1 h1 {
+    color: #fff;
+    font-size: 60px;
+  }
+
+  .section-1 p {
+    color: #127b8e;
+    font-size: 20px;
+    background: #fff;
+    padding: 7px;
+    border-radius: 5px;
+  }
+
+  .side-bar ul {
+    margin-top: 20px;
+    list-style: none;
+  }
+
+  .side-bar ul li {
+    font-size: 16px;
+    padding: 20px 0px;
+    margin-left: -20px;
+    transition: 500ms;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .side-bar ul li:hover {
+    background: #127b8e;
+  }
+
+  .side-bar ul li a {
+    text-decoration: none;
+    color: #eee;
+    cursor: pointer;
+    letter-spacing: 1px;
+  }
+
+  .side-bar ul li a i {
+    display: inline-block;
+    padding-right: 5px;
+    font-size: 13px;
+  }
+
+  #navbtn {
+    display: inline-block;
+    margin-left: 20px;
+    font-size: 20px;
+    transition: 500ms color;
+  }
+
+  #checkbox {
+    display: none;
+  }
+
+  #checkbox:checked~.body .side-bar {
+    margin-left: -100px;
+    width: 80px;
+  }
+
+  #checkbox:checked~.body .side-bar .user-p {
+    visibility: hidden;
+  }
+
+  #checkbox:checked~.body .side-bar a span {
+    display: none;
+  }
+
+  .wasa {
+    margin-left: 120px;
+
+    margin-bottom: -30px;
+
+  }
+
+  .e-table {
+    color: black;
+    margin-top: 2px;
+  }
+
+  #textmed {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: larger;
+  }
+
+  #side {
+    margin-top: 95px;
+    padding-bottom: 150px;
+    height: 790px;
+
+  }
+
+  #meddew {
+    text-align: center;
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+    font-weight: bold;
+    font-family: "Times New Roman";
+    background-clip: text;
+    background: linear-gradient(to right, #06a443, #156d8a);
+    -webkit-background-clip: text;
+    color: transparent;
+    text-fill-color: transparent;
+    display: inline;
+
+  }
+
+  @*body{font-family:'Arial',sans-serif;margin:0;padding:0;background-color:#ffffff;}*@.card-title {
+    font-family: 'Times New Roman', Times, serif;
+  }
+
+  .logo {
+    margin-top: 5px;
+  }
+
+  .card {
+    margin-top: 10px;
+  }
+
+  nav {
+    background-color: #1976D2;
+    color: #fff;
+    padding: 0.5em;
+    text-align: center;
+
+
+  }
+
+  section {
+    padding: 20px;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  h2 {
+    color: #1E88E5;
+  }
+
+  .card-title {
+    font-family: "Times New Roman";
+    font-weight: bold;
+  }
+
+  .card {
+    background-color: #f5f0f0;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(219, 18, 18, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    color: rgb(11, 11, 11);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .card th {
+    padding-top: px;
+    padding-bottom: 8px;
+    text-align: left;
+    background-color: rgb(4, 170, 153);
+    color: rgb(238, 236, 236);
+  }
+
+  .card:hover {
+    transform: scale(1.05);
+  }
+
+  footer {
+    background-color: #1E88E5;
+    color: #fff;
+    text-align: center;
+    padding: 1em 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+</style>
+
+<script>
+  $(document).ready(function () {
+    $("#createss").click((e) => {
+      var ardata = {};
+
+      var form = $("#creates").serializeArray();
+      form.forEach(function (item) {
+        ardata[item.name] = item.value;
+      });
+      $.ajax({
+        url: "../api/newapi/inv", //url where you want to submit the data,
+        method: "POST",             //method of submission
+        data:
+        {
+          i: ardata,
+        },
+        //type of response expected from server
+      })
+        .done(function () {
+          $("#creates")[0].reset();
+          $("#exampleModal").modal("toggle");
+          displayDepartmentData();
+
+        })
+      console.log(ardata)
+
+
+    });
+
+    displayDepartmentData();
+    yawaDisplay();
+
+    function yawaDisplay() {
+      $.ajax("../api/newapi/getinvts")
+        .done(function (result) {
+          console.log(result);
+        });
+    }
+
+    function getDepartment() {
+      $.ajax("../api/newapi/getInvt")
+        .done(function (result) {
+          InvtList = result;
+        });
+    }
+    $(document).ready(function() {
+        $('#printBtn').click(function() {
+            printTableData();
+        });
+
+        function printTableData() {
+            var table = document.getElementById('dataints');
+            var rows = table.rows;
+            var content = '<table style="width: 100%; border-collapse: collapse;">';
+
+            // Optional: Include headers
+            content += '<thead><tr>';
+            for (var i = 0; i < rows[0].cells.length - 1; i++) { // Exclude the last column (Actions)
+                content += '<th style="border: 1px solid black; padding: 5px;">' + rows[0].cells[i].innerText + '</th>';
+            }
+            content += '</tr></thead>';
+
+            content += '<tbody>';
+            for (var i = 1; i < rows.length; i++) { // Start from 1 to skip header row
+                var cells = rows[i].cells;
+                content += '<tr>';
+                for (var j = 0; j < cells.length - 1; j++) { // Exclude the last column (Actions)
+                    content += '<td style="border: 1px solid black; padding: 5px;">' + cells[j].innerText + '</td>';
+                }
+                content += '</tr>';
+            }
+            content += '</tbody></table>';
+
+            var printWindow = window.open('', '', 'height=600,width=800');
+            printWindow.document.write('<html><head><title>Print Table Data</title>');
+            printWindow.document.write('<style>');
+            printWindow.document.write('body { font-family: Arial, sans-serif; }');
+            printWindow.document.write('table { width: 100%; border-collapse: collapse; }');
+            printWindow.document.write('th, td { border: 1px solid black; padding: 5px; text-align: left; }');
+            printWindow.document.write('</style>');
+            printWindow.document.write('</head><body>');
+            printWindow.document.write('<h1>Printed Data</h1>');
+            printWindow.document.write(content);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+        }
+
+        // Initialize DataTable and other functions remain unchanged
+        // ... (rest of your existing JavaScript code)
+    });
+
+
+    function displayDepartmentData() {
+      $('#dataints').DataTable().destroy();
+  @* var table = $('#dataints').DataTable(); *@
+    if (!$.fn.DataTable.isDataTable('#dataints')) {
+        $('#dataints').DataTable({
+          responsive: true,
+          ajax: {
+            url: "../api/newapi/getinvts", // API endpoint to retrieve department
+            dataSrc: ''
+          },
+          columns: [
+  @* { data: 'id' }, *@
+            { data: 'typemed' },
+            { data: 'mendname' },
+            { data: 'medis' },
+            { data: 'price' },
+            { data: 'medicinetyp' },
+            { data: 'stck' },
+            { data: 'statusmed' },
+
+            {
+              data: 'id',
+              render: function (data, type, row) {
+                return updatebtn(data);
+
+              }
+            },
+          ]
+        });
+      }
+      getDepartment();
+    }
+
+
+    function updatebtn(Id) {
+      return "<center><a class='btn btn-success update' data-update =" + Id + "><i class='fa-solid fa-pen-to-square' style='color : #ffffff;'></i></a> | <a class='btn btn-danger Delete' data-delete=" + Id + "><i class='fa-solid fa-trash' style='color : #ffffff;'></i></a></center>"
+    }
+    $("tbody").delegate(".update", "click", function (e) {
+      //console.log("I was clicked");
+      var i = e.target.closest("a").getAttribute("data-update");
+      if (i != null) {
+        $("#updates")[0].reset();
+        $("#modalupdate").modal("toggle");
+
+        selectedUpdate = i;
+        selectedInvt = InvtList.find(element => element.id == i);
+
+        console.log(selectedInvt);
+
+        oFormObject = document.forms["updates"];
+        initForm(oFormObject, selectedInvt);
+
+      }
+
+    });
+    function alertSaveChanges() {
+      Swal.fire({
+        title: 'Do you want to save the changes?',
+        confirmButtonText: 'Save',
+        showCancelButton: true,
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          updateHolder();
+        }
+      })
+    }
+    function displaySavedProgress() {
+      Swal.fire({
+        icon: 'success',
+        title: 'Update has been saved',
+        showConfirmButton: false,
+        timer: 1500
+      })
+    }
+
+    function updateHolder() {
+      var arrData = {};
+      var formelements = $("#updates .form-group");
+
+      //getting the data from the form
+      var formInputs = $("#updates").serializeArray();
+      formInputs.forEach(function (item) {
+
+        arrData[item.name] = item.value;
+      });
+      arrData.Id = selectedUpdate;
+
+      console.log(arrData);
+
+      if (formInputs.length === formelements.length && formInputs[0].value !== '') {
+  @* proceedUpdate(arrData); *@
+          $.ajax
+            ({
+              url: "../api/newapi/updateinv",
+              type: "POST",
+              data:
+              {
+                wew: arrData,
+  @* userid : InvtList.userid *@
+
+                    },
+    })
+    .done(function () {
+      $("#updates")[0].reset();
+      $("#modalupdate").modal("toggle");
+      displayDepartmentData();
+      displaySavedProgress();
+    });
+            }else
+  {
+    alertError();
+  }
+        }
+
+  $("#updatdcs").click(function () {
+    alertSaveChanges();
+  });
+
+  @* function proceedUpdate(arrData)
+    {
+    //AJAX UPDATE Invt
+
+    } *@
+
+    function initForm(form, data) {
+
+      Object.getOwnPropertyNames(data).forEach(function (item) {
+        //console.log(form.elements[item.charAt(0).toUpperCase() + item.slice(1)]);
+        var currentElem = form.elements[item.charAt(0).toUpperCase() + item.slice(1)];
+
+        if (currentElem == null) { return; }
+
+        if (currentElem.tagName == "SELECT") {
+          var selectChildren = Array.from(currentElem.children);
+          var matchedOpt = selectChildren.find(opt => opt.value == selectedInvt.id);
+          if (matchedOpt) {
+            matchedOpt.selected = true;
+          }
+        } else {
+          form.elements[item.charAt(0).toUpperCase() + item.slice(1)].setAttribute("value", data[item]);
+        }
+      });
+
+      //to populate a description
+
+      $('.awts').val(data.medis);
+      $('.awtms').val(data.typemed);
+      $('.afg').val(data.medicinetyp);
+      $('.stk').val(data.stck);
+      $('.stmed').val(data.statusmed)
+    }
+  $("tbody").delegate(".Delete", "click", function (e) {
+    var i = e.target.closest("a").getAttribute("data-delete");
+    if (i != null) {
+      //Insert code here for the delete
+      selectedDeleteId = i;
+      alertDeleteConfirmation();
+    }
+    function alertDeleteConfirmation() {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          proceedDelete();
+        }
+      })
+    }
+    function proceedDelete() {
+      //AJAX DELETE DEPARTMENT
+      $.ajax
+        ({
+          url: "../api/newapi/delete",
+          type: "POST",
+          data:
+          {
+            dl: selectedDeleteId
+          },
+        })
+        .done(function () {
+          displayDepartmentData();
+          alertDeleteInfo();
+        });
+    }
+
+    function alertDeleteInfo() {
+      Swal.fire(
+        'Deleted!',
+        'Your Item has been deleted.',
+        'success'
+      )
+    }
+  });
+
+  });
+
+  function openNav() {
+    document.getElementById("mySidebar").style.width = "250px";
+    document.getElementById("main").style.marginLeft = "250px";
+  }
+
+  function closeNav() {
+    document.getElementById("mySidebar").style.width = "0";
+    document.getElementById("main").style.marginLeft = "0";
+  }
+  
+</script>

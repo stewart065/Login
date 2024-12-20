@@ -1,0 +1,148 @@
+@model login.ViewModel.Profile
+        <a class="btn btn-info" asp-action="homepage"><i  class="fa-solid fa-list "style="color:white;"></i></a>
+
+<div class="container rounded bg-white mt-4 mb-5">
+  <div class="row">
+    <div class="col-md-3 border-right">
+      <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+        <img class="rounded-circle mt-5" width="250px" src="https://scontent.fceb7-1.fna.fbcdn.net/v/t1.15752-9/368075470_2315398591993761_8374933678661800853_n.png?_nc_cat=107&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeFmir4yccobZNT5I94TE3FZzebmncEa6CLN5uadwRroItmkabzunSsyqMrZHI-6NVmH39FAmTFHEgf9VsufNjqD&_nc_ohc=K2peVYcMoq0AX_hv_ZT&_nc_ht=scontent.fceb7-1.fna&oh=03_AdRjGLYS4wV-S2NDGDgMRrcytfEZvSzNPoJhcIXCf5gwyw&oe=65C489C0">
+        @* <span class="font-weight-bold">Your Username</span>
+        <span class="text-black-50">your_email@example.com</span>
+        <span>Your Phone Number</span> *@
+      </div>
+    </div>
+    <div class="col-md-5 border-right">
+      <div class="p-3 py-5">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="text-right">Profile Settings</h4>
+        </div>
+        <div class="row mt-2">
+          <div class="col-md-6">
+            <label class="labels">Pharmcy Name</label>
+            <input id="storeNameInput" asp-for="StName" type="text" class="form-control" placeholder="Enter store name" value="" disabled>
+          </div>
+          <div class="col-md-6">
+            <label class="labels">Username</label>
+            <input id="usernameInput" type="text" asp-for="UserName" class="form-control" value="" placeholder="Username" disabled>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-md-12">
+            <label class="labels">Mobile Number</label>
+            <input id="phonenoinputs" type="text" asp-for="PhoneNumber" class="form-control" placeholder="Enter phone number" value="" disabled>
+          </div>
+         
+          <div class="col-md-12">
+            <label class="labels">Email</label>
+            <input id="emailinputs" type="text" asp-for="Email" class="form-control" placeholder="Enter email ID" value="" disabled>
+          </div>
+          <div class="col-md-12">
+            <label class="labels">Address</label>
+            <input id="addresinput" type="text" asp-for="Addres2" class="form-control" placeholder="Address" value="" disabled>
+          </div>
+        </div>
+          
+        @* <div class="mt-5 text-center">
+          <button class="btn btn-primary profile-button" type="button">Save Profile</button>
+        </div> *@
+      </div>
+    </div>
+    
+  </div>
+    @* <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/js/bootstrap.bundle.min.js"></script> *@
+</div>
+<style>
+body {
+  /* margin-bottom: 60px;
+  background-color: #4070f4; */
+ 
+    background: linear-gradient(45deg, #06a443, #156d8a, #4d996a, #4a8fa6);
+    background-size: 400% 400%;
+    animation: gradientAnimation 10s ease infinite;
+  }
+  
+  @@keyframes gradientAnimation {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+.form-control:focus {
+      border-color: #2980b9;
+      box-shadow: 0 0 5px rgba(52, 152, 219, 0.5); 
+    }
+    .form-control {
+      border: 2px solid #3498db; 
+      border-radius: 8px;
+      padding: 10px; 
+      margin-bottom: 10px;
+      transition: border-color 0.2s ease-in-out; 
+    }
+
+.profile-button {
+    background: rgb(99, 39, 120);
+    box-shadow: none;
+    border: none;
+    color: #fff; /* Added text color */
+}
+
+.profile-button:hover {
+    background: #682773;
+}
+
+.profile-button:focus {
+    background: #682773;
+    box-shadow: none;
+}
+
+.profile-button:active {
+    background: #682773;
+    box-shadow: none;
+}
+
+.back:hover {
+    color: #682773;
+    cursor: pointer;
+}
+
+.labels {
+    font-size: 11px;
+    color: #682773; /* Added text color */
+}
+
+.add-experience:hover {
+    background: #BA68C8;
+    color: #fff;
+    cursor: pointer;
+    border: solid 1px #BA68C8;
+}
+a{
+  margin-bottom: -20px;
+  margin-left: 50px;
+}
+</style>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script>
+  $(()=>{
+    $.ajax({
+      url:"../api/newapi/getprofile",
+      method:"GET"
+    }).done(res=>{
+      console.log(res)
+      $("#storeNameInput").val(res.storeName)
+      $("#usernameInput").val(res.userName)
+      $("#phonenoinputs").val(res.phoneNumber)
+      $("#emailinputs").val(res.email)
+      $("#addresinput").val(res.address)
+    }).catch(error=>{
+      console.error(error)
+    })
+  })
+</script>

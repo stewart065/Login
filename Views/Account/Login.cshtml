@@ -1,0 +1,213 @@
+@model login.ViewModel.LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+
+
+
+  
+<div class="container">
+   
+            @* <img src="/images/wewee.png" alt="banner"  class="img-fluid" /> *@
+            <img width="150px" src="https://scontent.fmnl25-4.fna.fbcdn.net/v/t1.15752-9/368075470_2315398591993761_8374933678661800853_n.png?_nc_cat=107&ccb=1-7&_nc_sid=8cd0a2&_nc_eui2=AeFmir4yccobZNT5I94TE3FZzebmncEa6CLN5uadwRroItmkabzunSsyqMrZHI-6NVmH39FAmTFHEgf9VsufNjqD&_nc_ohc=pyyXcWG2nuQAX9eFw0k&_nc_ht=scontent.fmnl25-4.fna&oh=03_AdR7x1wpud9e5uI12S6VO0XcbYJB1VVttpHPKNufsOH3gA&oe=660CD400" alt="banner">
+
+       
+        <div class="text">
+            <h1>LOGIN</h1>
+            @* <p>ASK MED</p> *@
+        </div>
+            <form asp-action="Login" class="form">
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <p>@error.ErrorMessage</p>
+                        }
+                    </div>
+                }
+                <div class="animated-input">
+                    @* <label for="Email" class="form-label">Email</label> *@
+                    <input asp-for="Email" class="form-control" id="Email" placeholder="Email" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                
+
+                
+                    @* <label for="Password" class="form-label">Password</label> *@
+                    <input asp-for="Password" class="form-control" type="password" id="Password" placeholder="Password" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+                <div style="margin-top: -30px;">
+                   <small> No Account  </small> <br>
+                </div>
+            </form>
+                @* <p class="arrow-down-small"></p> <br> *@
+                <a asp-action="Index" class="account">Register Here</a>
+           
+        
+    
+</div>
+<style>
+    .arrow-down-small {
+      display: inline-block;
+ width: 0;
+ height: 0;
+ border-left: 10px solid transparent;
+ border-right: 10px solid transparent;
+ border-top: 10px solid black;
+      }
+body {
+  /* margin-bottom: 60px;
+  background-color: #4070f4; */
+ 
+    background: linear-gradient(45deg, #06a443, #156d8a, #4d996a, #4a8fa6);
+    background-size: 400% 400%;
+    animation: gradientAnimation 10s ease infinite;
+  }
+  
+  @@keyframes gradientAnimation {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+ /* body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding-top: 20px;
+  background-image: url("");
+  background-repeat: no-repeat;
+  font-family: "Montserrat", sans-serif;
+}  */
+.container {
+    top: 40px;
+  position: relative;
+  width: 470px;
+  padding: 70px 20px;
+  background: #fff;
+  text-align: center;
+  border-radius: 2%;
+
+}
+.container::after {
+  content: "";
+  position: absolute;
+  top: -200px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 420px;
+  background-image: url("");
+  background-position: top;
+  background-size: cover;
+  z-index: -11;
+}
+
+.container .text {
+  margin: 30px 0 5px 0;
+}
+.container .text h1 {
+  color: #9900ff;
+  font-size: 2.5rem;
+}
+.container .text p {
+  font-size: 1.5rem;
+  color: #ff14b1;
+}
+.container .form .animated-input {
+  display: flex;
+  flex-direction: column;
+}
+.container .form .animated-input input[type="text"],
+.container .form .animated-input input[type="password"] {
+  font-size: 1.3rem;
+  padding: 15px 10px 2px 5px;
+  outline: none;
+  border: none;
+  border-bottom: solid 1px #616161;
+  background: none;
+  transition: all 0.3s ease;
+}
+.container .form .animated-input input[type="text"]:focus,
+.container .form .animated-input input[type="password"]:focus {
+  padding: 20px 10px;
+  border-color: #ff14b1;
+}
+.container .form .animated-input input[type="password"] {
+  margin-top: 15px;
+}
+.container .form .check {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  user-select: none;
+}
+.container .form .check input {
+  display: none;
+}
+.container .form .check .disc {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #fff;
+  display: inline-block;
+  cursor: pointer;
+  box-shadow: 0 0 3px #000;
+  transition: 0.2s ease;
+}
+.container .form .check .forget a:hover {
+  color: #9900ff;
+}
+.container .btn {
+  border: none;
+  outline: none;
+  width: 200px;
+  padding: 15px;
+  margin: 25px auto;
+  font-size: 1.5rem;
+  color: #fff;
+  background: #4a8fa6;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 1px 1px 6px #616161;
+  transition: ALL 0.3s ease;
+}
+.container .btn:hover {
+  background: #4d996a;
+}
+.container .account {
+  text-decoration: none;
+  color: #657b82;
+}
+.container .account a:hover {
+  color: #4d996a;
+}
+@@keyframes animate {
+  0% {
+    top: -120px;
+  }
+  100% {
+    top: -130px;
+  }
+} 
+    
+</style>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

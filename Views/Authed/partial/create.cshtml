@@ -1,0 +1,136 @@
+@model login.Models.Invt
+@{
+    ViewData["Title"] = "Create";
+}
+<template id="categoryOptionTemplate">
+  <option value=""></option>
+</template>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Medicine info</h5>
+        @* <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button> *@
+      </div>
+      <div class="modal-body">
+             <div class="row">
+    <div class="col-md-1">
+                
+          <form asp-action="Create" id="creates" style="width: 29rem;">
+              <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+              <div class="form-group">
+                  <label  class="control-label">Generic Name</label>
+                  <select asp-for="Typemed" id="catselect" class="form-select"></select>
+                  <span asp-validation-for="Typemed" class="text-danger"></span>
+              </div>
+                <div class="form-group">
+                  <label  class="control-label">Status</label>
+                  <select asp-for="Statusmed"  class="form-select">
+                    <option value="Active">Active</option>
+                    <option value="InActive">InActive</option>
+                  </select>
+                  <span asp-validation-for="Statusmed" class="text-danger"></span>
+              </div>
+               <div class="form-group">
+                  <label  class="control-label">Type</label>
+                  <select asp-for="Medicinetype"  class="form-select">
+                    <option value="Tablet">Tablet</option>
+                    <option value="Syrup">Syrup</option>
+                    <option value="capsule">Capsule</option>
+                  </select>
+                  <span asp-validation-for="Statusmed" class="text-danger"></span>
+              </div>
+              <div class="form-group">
+                  <label  class="control-label">BrandName</label>
+                  <input asp-for="Mendname" class="form-control" placeholder="BrandName" required />
+                  <span asp-validation-for="Mendname" class="text-danger"></span>
+              </div>
+              <div class="form-group">
+                  <label  class="control-label">Price</label>
+                  <input asp-for="Price" class="form-control" placeholder="Price" required />
+                  <span asp-validation-for="Price" class="text-danger"></span>
+              </div>
+              <div class="form-group">
+                  <label  class="control-label">Stock</label>
+                  <input asp-for="Stock" class="form-control" placeholder="Stock" required />
+              </div>
+              @* <div>
+                <select asp-for="Statusmed">
+                  <option value="Active">Active</option>
+                  <option value="InActive">InActive</option>
+                </select>
+              </div> *@
+            
+              <div class="form-group">
+                  <label  class="control-label">Description</label>
+                  @* <input   /> *@
+                  <textarea asp-for="Medis" class="form-control awts" required></textarea>
+                  <span asp-validation-for="Medis" class="text-danger"></span>
+              </div>
+            
+              <!-- Hidden input for user ID -->
+              @* <input type="hidden" asp-for="Id" id="userId" /> *@
+
+          </form>
+
+    </div>
+</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" id="createss"  class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+  .form-group{
+    margin-bottom :12px;
+  }
+textarea {
+  width: 100%;
+  height: 150px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  font-size: 16px;
+  resize: none;
+}
+</style>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+}
+
+<script>
+  $(document).ready(function () {
+
+    $.get("../api/newapi/getAllCategories", function(result) {
+  const template = document.querySelector("#categoryOptionTemplate");
+  const parents = document.querySelectorAll("#catselect");
+  
+  for (const parent of parents) {
+    for (const item of result) {
+      const cloned = template.content.cloneNode(true);
+      cloned.querySelector("option").value = item.name;
+      cloned.querySelector("option").innerText = item.name;
+      parent.prepend(cloned);
+    }
+  }
+});
+  })
+
+  
+</script>
+
+
+

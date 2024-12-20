@@ -1,0 +1,430 @@
+@model login.ViewModel.PendingAndApprovedUsersViewModel
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Page Title</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+    <style>
+        /* Sidebar styles */
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #333;
+            padding-top: 20px;
+            transition: left 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+            z-index: 1000;
+            color: white;
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .page-content {
+            margin-left: 0;
+            transition: margin-left 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+        }
+
+        .page-content.open {
+            margin-left: 250px;
+        }
+
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 16px;
+            color: #ccc;
+            display: block;
+        }
+
+        .sidebar a:hover {
+            background-color: #555;
+            color: #fff;
+        }
+
+        .sidebar .toggle-btn {
+            position: absolute;
+            top: 10px;
+            right: -30px;
+            background-color: #333;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .sidebar .toggle-btn i {
+            transform: rotate(180deg);
+        }
+
+        .sidebar.open .toggle-btn i {
+            transform: rotate(0deg);
+        }
+
+        /* Card and table styles */
+        .card {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+            max-width: 800px;
+            margin: auto;
+            margin-top: 2rem;
+            /* Added margin-top for spacing */
+        }
+
+        .card .card-title {
+            color: #000000;
+            margin-bottom: 1rem;
+            text-transform: capitalize;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .card .card-description {
+            margin-bottom: 1rem;
+            font-weight: 400;
+            color: #76838f;
+        }
+
+        .table-responsive {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            -ms-overflow-style: -ms-autohiding-scrollbar;
+        }
+
+        .table,
+        .jsgrid .jsgrid-table {
+            width: 100%;
+            max-width: 100%;
+            margin-bottom: 1rem;
+            background-color: transparent;
+        }
+
+        .table thead th,
+        .jsgrid .jsgrid-table thead th {
+            border-top: 0;
+            border-bottom-width: 1px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+        }
+
+        .table td,
+        .jsgrid .jsgrid-table td {
+            font-size: 0.875rem;
+            padding: 0.875rem 0.9375rem;
+        }
+
+        .badge {
+            border-radius: 0.25rem;
+            font-size: 12px;
+            line-height: 1;
+            padding: 0.375rem 0.5625rem;
+            font-weight: normal;
+        }
+
+        .btn-custom {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            width: 75px;
+            height: 30px;
+            border-radius: 0.25rem;
+            padding: 0.375rem 0.75rem;
+            font-size: 0.775rem;
+            cursor: pointer;
+        }
+
+        .btn-custom:hover {
+            background-color: #0056b3;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 2rem;
+            border: 1px solid #888;
+            width: 50%;
+            max-width: 400px;
+            border-radius: 0.5rem;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+        }
+
+        /* Additional styles */
+        .section-title {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #007bff;
+        }
+
+        .table th,
+        .table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .table-space {
+            margin-top: 2rem;
+            /* Space above the approved table */
+        }
+
+        @@media (max-width: 991.98px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .page-content {
+                margin-left: 0;
+            }
+        }
+
+        @@media print {
+            .action-column {
+                display: none !important;
+            }
+        }
+
+        .text-right {
+            text-align: right;
+            margin-top: 10px;
+            /* Adjust margin as needed */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar open" id="sidebar">
+        <a asp-action="DisplayPendingAndApprovedUsers"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a asp-action="useraccountitems"><i class="fas fa-user"></i> Users Account</a>
+        <a asp-action="Logout" asp-controller="Account"><i class="fas fa-sign-out-alt"></i> <span> Logout</span></a>
+        <button class="toggle-btn" onclick="toggleSidebar()">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+    </div>
+
+    <div class="page-content open" id="page-content">
+        <div class="padding">
+            <div class="row container d-flex justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h4 class="card-title mb-0">Pending Users</h4>
+                                    <p class="card-description">Responsive table with pending users</p>
+                                </div>
+                                <div>
+                                    <button class="btn btn-custom" onclick="printTable('pendingTable')">
+                                        <i class="fas fa-print"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="table-responsive" id="pendingTable">
+                                <table class="table table-bordered">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>Store Name</th>
+                                            <th>Username</th>
+                                            <th>Address</th>
+                                            <th>Email Address</th>
+                                            <th>Status</th>
+                                            <th class="action-column">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var user in Model.PendingUsers)
+                                        {
+                                            <tr>
+                                                <td>@user.StName</td>
+                                                <td>@user.UserName</td>
+                                                <td>@user.Addres2</td>
+                                                <td>@user.Email</td>
+                                                <td><span class="badge badge-danger">Pending</span></td>
+                                                <td class="action-column">
+                                                    <button class="btn btn-custom"
+                                                        onclick="openModal('@user.Id', 'Pending')">Update</button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-space"></div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="text-center flex-grow-1">
+                                    <h4 class="card-title mb-0">Approved Users</h4>
+                                    <p class="card-description">
+                                        Responsive table with approved users
+                                    </p>
+                                </div>
+                                <button class="btn btn-custom" onclick="printTable('approvedTable')">
+                                    <i class="fas fa-print"></i>
+                                </button>
+                            </div>
+                            <div class="table-responsive" id="approvedTable">
+                                <table class="table table-bordered">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>Store Name</th>
+                                            <th>Username</th>
+                                            <th>Address</th>
+                                            <th>Email Address</th>
+                                            <th>Status</th>
+                                            <th class="action-column">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var user in Model.ApprovedUsers)
+                                        {
+                                            <tr>
+                                                <td>@user.StName</td>
+                                                <td>@user.UserName</td>
+                                                <td>@user.Addres2</td>
+                                                <td>@user.Email</td>
+                                                <td><label class="badge badge-success">Approved</label></td>
+                                                <td class="action-column">
+                                                    <button class="btn btn-custom"
+                                                        onclick="openModal('@user.Id', 'Approved')">Update</button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2 class="card-title">Update User Role</h2>
+                <p class="card-description">Select the new role for the user:</p>
+                <form id="updateForm" asp-action="UpdateUserRoles" asp-controller="Account" method="post">
+                    <input id="userIdInput" type="hidden" name="userId" value="" />
+                    <div class="form-group">
+                        <label for="newRole">New Role:</label>
+                        <select id="newRole" name="newRole" class="form-control">
+                            <option value="Pending">Pending</option>
+                            <option value="Approved">Approved</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Update Role</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            $(".sidebar").toggleClass("open");
+
+            if ($(".sidebar").hasClass("open")) {
+                $(".sidebar").css("left", "0");
+                $(".page-content").css("margin-left", "250px");
+                $(".sidebar .toggle-btn i").removeClass("fa-chevron-right").addClass("fa-chevron-left");
+            } else {
+                $(".sidebar").css("left", "-250px");
+                $(".page-content").css("margin-left", "0");
+                $(".sidebar .toggle-btn i").removeClass("fa-chevron-left").addClass("fa-chevron-right");
+            }
+        }
+
+        function openModal(userId, currentStatus) {
+        document.getElementById("userIdInput").value = userId;
+        document.getElementById("newRole").value = currentStatus; // Set the dropdown to the current status
+        document.getElementById("myModal").style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById("myModal").style.display = "none";
+    }
+
+        function printTable(tableId) {
+            var table = document.getElementById(tableId);
+            var rows = table.getElementsByTagName("tr");
+
+            var dataToPrint = '<table class="table table-bordered"><thead>' + rows[0].innerHTML + '</thead><tbody>';
+
+            // Iterate through table rows (excluding the first row, which is the header)
+            for (var i = 1; i < rows.length; i++) {
+                var cells = rows[i].getElementsByTagName("td");
+                dataToPrint += "<tr>";
+                for (var j = 0; j < cells.length - 1; j++) { // Skip the last column (Action)
+                    dataToPrint += "<td>" + cells[j].innerText + "</td>";
+                }
+                dataToPrint += "</tr>";
+            }
+            dataToPrint += "</tbody></table>";
+
+            var newWin = window.open("");
+            newWin.document.write('<html><head><title>Print</title>');
+            newWin.document.write('<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">');
+            newWin.document.write('<style> .action-column { display: none !important; } </style>');
+            newWin.document.write('</head><body>');
+            newWin.document.write(dataToPrint);
+            newWin.document.write('</body></html>');
+            newWin.document.close();
+            newWin.print();
+        }
+    </script>
+
+</body>
+
+</html>
