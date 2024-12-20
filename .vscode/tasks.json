@@ -46,7 +46,7 @@
                 "dockerfile": "${workspaceFolder}/Dockerfile",
                 "context": "${workspaceFolder}",
                 "platform": {
-                    "os": "linux",
+                    "os": "windows",
                     "architecture": "amd64"
                 },
                 "pull": true
@@ -61,7 +61,9 @@
             "dependsOn": [
                 "docker-build: debug"
             ],
-            "dockerRun": {},
+            "dockerRun": {
+                "os": "Windows"
+            },
             "netCore": {
                 "appProject": "${workspaceFolder}/login.csproj",
                 "enableDebugging": true
@@ -73,7 +75,9 @@
             "dependsOn": [
                 "docker-build: release"
             ],
-            "dockerRun": {},
+            "dockerRun": {
+                "os": "Windows"
+            },
             "netCore": {
                 "appProject": "${workspaceFolder}/login.csproj"
             }
