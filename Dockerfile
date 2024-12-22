@@ -1,23 +1,27 @@
-FROM mcr.microsoft.com/dotnet/aspnet:6.0-nanoserver-1809 AS base
+# Base image for running the application
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 8080
-
 ENV ASPNETCORE_URLS=http://+:8080
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0-nanoserver-1809 AS build
-ARG configuration=Release
+# Build image for compiling the application
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["login.csproj", "./"]
 RUN dotnet restore "login.csproj"
+
+# Copy the remaining source code and build the application
 COPY . .
-WORKDIR "/src/."
-RUN dotnet build "login.csproj" -c $configuration -o /app/build
+RUN dotnet build "login.csproj" -c Release -o /app/build
 
+# Publish the application
 FROM build AS publish
-ARG configuration=Release
-RUN dotnet publish "login.csproj" -c $configuration -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "login.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
+# Final runtime image
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+# Entry point for the application
 ENTRYPOINT ["dotnet", "login.dll"]
