@@ -1,27 +1,31 @@
-# Base image for running the application
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
-WORKDIR /app
-EXPOSE 8080
-ENV ASPNETCORE_URLS=http://+:8080
-
-# Build image for compiling the application
+# Use the official .NET 6.0 SDK image as the base image
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-WORKDIR /src
-COPY ["login.csproj", "./"]
-RUN dotnet restore "login.csproj"
 
-# Copy the remaining source code and build the application
-COPY . .
-RUN dotnet build "login.csproj" -c Release -o /app/build
+# Set the working directory
+WORKDIR /app
+
+# Copy the csproj file and restore any dependencies
+COPY *.csproj ./
+RUN dotnet restore
+
+# Copy the rest of the files and build the project
+COPY . ./
+RUN dotnet build -c Release -o /app/build
 
 # Publish the application
-FROM build AS publish
-RUN dotnet publish "login.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish -c Release -o /app/publish
 
-# Final runtime image
-FROM base AS final
+# Use the official .NET 6.0 ASP.NET runtime image for the final stage
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
+
+# Set the working directory
 WORKDIR /app
-COPY --from=publish /app/publish .
 
-# Entry point for the application
+# Copy the published application from the build stage
+COPY --from=build /app/publish .
+
+# Expose the port on which the application will run
+EXPOSE 80
+
+# Define the entry point for the container
 ENTRYPOINT ["dotnet", "login.dll"]
