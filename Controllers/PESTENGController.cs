@@ -77,7 +77,7 @@ namespace login.Controllers
                     from inv in invs
                     join usr in usrs
                     on inv.Userid equals usr.Id
-                    where inv.Medicinetype == "capsule"
+                    where inv.Medicinetype == "Capsule"
                     select new capsule
                     {
                         Id = inv.Id,
