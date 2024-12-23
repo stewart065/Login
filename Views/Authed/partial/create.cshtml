@@ -39,7 +39,7 @@
                   <select asp-for="Medicinetype"  class="form-select">
                     <option value="Tablet">Tablet</option>
                     <option value="Syrup">Syrup</option>
-                    <option value="capsule">Capsule</option>
+                    <option value="Capsule">Capsule</option>
                   </select>
                   <span asp-validation-for="Statusmed" class="text-danger"></span>
               </div>
@@ -57,12 +57,12 @@
                   <label  class="control-label">Stock</label>
                   <input asp-for="Stock" class="form-control" placeholder="Stock" required />
               </div>
-              <div>
+              @* <div>
                 <select asp-for="Statusmed">
                   <option value="Active">Active</option>
                   <option value="InActive">InActive</option>
                 </select>
-              </div>
+              </div> *@
             
               <div class="form-group">
                   <label  class="control-label">Description</label>
